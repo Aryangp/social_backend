@@ -6,7 +6,8 @@ const mongodbSession = require("connect-mongodb-session")(session)
 const mongoose = require("mongoose")
 const bcrypt = require('bcrypt')
 const User = require("./models/users")
-const alert= require("alert")
+const register =require("./routes/register")
+const login =require("./routes/login")
 
 
 
@@ -21,15 +22,18 @@ const store = new mongodbSession({
     collection: "mySessions"
 })
 
-const port = 3000
+const port = 5000
 app.set("view-engine", 'ejs')
 app.use(express.urlencoded({ extended: false }))
+app.use(express.json())
 app.use(session({
     secret: process.env.SECRET_KEY,
     resave: false,
     saveUninitialized: false,
     store: store,
 }))
+app.use("/",register)
+app.use("/",login)
 const isAuth = (req, res, next) => {
     if (req.session.isAuth) {
         next()
@@ -38,50 +42,9 @@ const isAuth = (req, res, next) => {
     }
 }
 app.get("/", (req, res) => {
-
-
     res.render("index.ejs")
 })
-app.get('/login', (req, res) => {
-    res.render("login.ejs")
-})
-app.post("/login", async (req, res) => {
-    const { email, password } = req.body
-    const user = await User.findOne({ email })
-    if (!user) {
 
-        alert("You have not register to app")   
-        return res.redirect("/register")
-    }
-    const isMatch = await bcrypt.compare(password, user.password)
-    if (!isMatch) {
-        return res.redirect("/login")
-
-    }
-    req.session.isAuth = true
-    res.redirect("/done")
-})
-app.get('/register', (req, res) => {
-    res.render("register.ejs")
-})
-app.post("/register", async (req, res) => {
-    const { username, email, password } = req.body
-    let user = await User.findOne({ email })
-    if (user) {
-        alert("already register go to login")
-        return res.redirect("/register")
-    }
-    const hashedPassword = await bcrypt.hash(password, 10)
-    user = new User({
-        username,
-        email,
-        password: hashedPassword,
-    })
-    await user.save();
-
-    res.redirect("/login")
-
-})
 app.get("/done", isAuth, (req, res) => {
     res.render("done.ejs")
 })
@@ -90,8 +53,6 @@ app.post("/logout", (req, res) => {
         if (err) throw err;
         res.redirect("/")
     })
-
-
 })
 
 app.listen(port, () => {
