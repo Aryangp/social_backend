@@ -45,6 +45,7 @@ app.get("/", (req, res) => {
     res.render("index.ejs")
 })
 
+    
 app.get("/done", isAuth, (req, res) => {
     res.render("done.ejs")
 })

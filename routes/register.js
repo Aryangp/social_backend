@@ -5,6 +5,7 @@ const bcrypt = require('bcrypt')
 const nodemailer = require('nodemailer')
 const { v4: uuidv4 } = require('uuid')
 const path = require('path');
+const alert = require('alert')
 require('dotenv').config()
 
 let transporter = nodemailer.createTransport({
@@ -26,9 +27,21 @@ router.get('/register', (req, res) => {
     res.render("register.ejs")
 })
 router.post("/register", async (req, res) => {
-    const { username, email, password } = req.body
+    const { username, email, password,cpassword } = req.body
     let user = await User.findOne({ email })
     if (user) {
+        return res.redirect("/register")
+    }
+    if (user) {
+        alert("already register go to login")
+        return res.redirect("/register")
+    }
+    if (password !== cpassword) {
+        alert("passwords do not match")
+        return res.redirect("/register")
+    }
+    if (password.length<8) {
+        alert("password must be atleast 8 chracters long")
         return res.redirect("/register")
     }
     const hashedPassword = await bcrypt.hash(password, 10)
