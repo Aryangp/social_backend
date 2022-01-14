@@ -1,4 +1,10 @@
 <h1>done succesfully</h1>
+<a href="/done/moreinfo">add more info</a>
+<div>
+	<%users.forEach(user => { %>
+	<img src="<%= user.photoImagePath %> " height="150" width="100" />
+	<%})%>
+</div>
 <form action="/logout" method="post">
-    <button>logout</button>
+	<button>logout</button>
 </form>

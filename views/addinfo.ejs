@@ -1,0 +1,40 @@
+<h1>Register</h1>
+<form action="/done/moreinfo" method="POST"  enctype="multipart/form-data">
+	<div>
+		<label for="name">first Name</label>
+		<input type="text" id="firstname" name="firstname" required />
+	</div>
+	<div>
+		<label>Last Name</label>
+		<input type="text" id="lastname" name="lastname" required />
+	</div>
+	<div>
+		<label>Email</label>
+		<input type="text" id="email" name="email" required />
+	</div>
+	<div>
+		<label>Age</label>
+		<input type="number" id="age" name="age" required />
+	</div>
+	<div>
+		<label>Birthdate</label>
+		<input type="date" id="email" name="birthdate" required />
+	</div>
+	<div>
+		<label>sex</label>
+		<input type="text" name="sex" placeholder="Male/female" required/>
+	</div>
+	<div>
+		<label>Address</label>
+		<textarea name="address" cols="30" rows="10"></textarea>
+	</div>
+	<div>
+		<label>Photos</label>
+		<input type="file" name="cover1" required/>
+	</div>
+	<div>
+		<label>Hobbies</label>
+		<textarea name="hobbies" cols="30" rows="10"></textarea>
+	</div>
+	<button type="submit">Save info</button>
+</form>

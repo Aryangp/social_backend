@@ -33,15 +33,15 @@ router.post("/register", async (req, res) => {
         return res.redirect("/register")
     }
     if (user) {
-        alert("already register go to login")
+        prompt("already register go to login")
         return res.redirect("/register")
     }
     if (password !== cpassword) {
-        alert("passwords do not match")
+        prompt("passwords do not match")
         return res.redirect("/register")
     }
     if (password.length<8) {
-        alert("password must be atleast 8 chracters long")
+        prompt("password must be atleast 8 chracters long")
         return res.redirect("/register")
     }
     const hashedPassword = await bcrypt.hash(password, 10)
@@ -60,7 +60,7 @@ router.post("/register", async (req, res) => {
 })
 
 function sendVerifiedEmail({ _id, email }, res) {
-    const currentUrl = "http://localhost:5000/"
+    const currentUrl = "http://localhost:3000/"
     const uniqueString = uuidv4() + _id;
     const mailOption = {
         from: "tomwayen07@gmail.com",
@@ -91,6 +91,7 @@ function sendVerifiedEmail({ _id, email }, res) {
 // do check to crrect user router
 router.get("/user/verify:userId/:uniqueString", (req, res) => {
     let { userId, uniqueString } = req.params;
+    console.log(userId)
     UserVerification.find({ userId }).then((result) => {
         if (result.length > 0) {
             const { expiresAt } = result[0]
