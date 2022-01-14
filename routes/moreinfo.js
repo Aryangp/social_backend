@@ -44,7 +44,6 @@ router.post("/moreinfo",upload.single('cover1') ,async (req, res)=>{
    users.address=req.body.address
    users.sex=req.body.sex
    users.photoImageName=req.file.filename
-   
    users.age=req.body.age
    users.birthdate=new Date(req.body.birthdate)
    users.hobbies=req.body.hobbies
