@@ -22,6 +22,7 @@ const usersSchema=new mongoose.Schema({
     sex: String,
     hobbies:String,
     photoImageName:String,
+    photoImageName2:String,
     age:Number,
     birthdate:{
         type:Date,
@@ -29,9 +30,14 @@ const usersSchema=new mongoose.Schema({
     verified:Boolean,
 })
 
-usersSchema.virtual("photoImagePath").get(function(){
+usersSchema.virtual("photoImagePath1").get(function(){
     if(this.photoImageName!=null){
       return  path.join('/',photoImageBasePath,this.photoImageName)
+    }
+})
+usersSchema.virtual("photoImagePath2").get(function(){
+    if(this.photoImageName2!=null){
+      return  path.join('/',photoImageBasePath,this.photoImageName2)
     }
 })
 

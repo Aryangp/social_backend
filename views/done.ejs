@@ -2,7 +2,9 @@
 <a href="/done/moreinfo">add more info</a>
 <div>
 	<%users.forEach(user => { %>
-	<img src="<%= user.photoImagePath %> " height="150" width="100" />
+	
+	<img src="<%= user.photoImagePath1 %> " height="150" width="100" />
+	<img src="<%= user.photoImagePath2 %> " height="150" width="100" />
 	<%})%>
 </div>
 <form action="/logout" method="post">

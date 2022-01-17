@@ -10,8 +10,10 @@ const register =require("./routes/register")
 const bodyParser=require("body-parser")
 const login =require("./routes/login")
 const moreinfo= require("./routes/moreinfo")
-
-
+const https = require("https")
+const fs = require('fs')
+const path = require('path')
+const upload =require("express-fileupload")
 dotenv.config()
 
 mongoose.connect(process.env.MONGOOSE_URL)
@@ -22,12 +24,19 @@ const store = new mongodbSession({
     uri: "mongodb://localhost/login",
     collection: "mySessions"
 })
-
+ const sslServer=https.createServer(
+     { 
+         key:fs.readFileSync(path.join(__dirname,"cert","key.pem")), 
+         cert:fs.readFileSync(path.join(__dirname,"cert","cert.pem"))
+     },
+     app
+ )
 const port = 3000
 app.set("view-engine", 'ejs')
 app.use(express.static('public'))
 app.use(bodyParser.urlencoded({limit:"10mb",extended:false}))
 app.use(express.json())
+app.use(upload())
 app.use(session({
     secret: process.env.SECRET_KEY,
     resave: false,
@@ -60,6 +69,8 @@ app.post("/logout", (req, res) => {
     })
 })
 
-app.listen(port, () => {
-    console.log(`server has started on ${port}`);
-})
+// app.listen(port, () => {
+//     console.log(`server has started on ${port}`);
+// })
+
+sslServer.listen(3443,()=>console.log("secure network has established on port 3443"))

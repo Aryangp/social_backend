@@ -60,7 +60,7 @@ router.post("/register", async (req, res) => {
 })
 
 function sendVerifiedEmail({ _id, email }, res) {
-    const currentUrl = "http://localhost:3000/"
+    const currentUrl = "https://localhost:3443/"
     const uniqueString = uuidv4() + _id;
     const mailOption = {
         from: "tomwayen07@gmail.com",
