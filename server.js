@@ -21,16 +21,9 @@ const db = mongoose.connection
 db.on("error", error => console.log(`${error}`))
 db.once("open", () => console.log('database connected'))
 const store = new mongodbSession({
-    uri: "mongodb://localhost/login",
-    collection: "mySessions"
+    uri: "mongodb+srv://uniqusStore:p6gXzwE79UbZ2bOJ@cluster0.zjtshle.mongodb.net/?retryWrites=true&w=majority",
+    collection: "uniqusStore"
 })
- const sslServer=https.createServer(
-     { 
-         key:fs.readFileSync(path.join(__dirname,"cert","key.pem")), 
-         cert:fs.readFileSync(path.join(__dirname,"cert","cert.pem"))
-     },
-     app
- )
 const port = 3000
 app.set("view-engine", 'ejs')
 app.use(express.static('public'))
@@ -46,31 +39,31 @@ app.use(session({
 app.use("/",register)
 app.use("/",login)
 app.use("/done",moreinfo)
+app.use("/user",require("./routes/userDetail"));
 const isAuth = (req, res, next) => {
     if (req.session.isAuth) {
         next()
     } else {
-        res.redirect("/login")
+        res.json({message:"you are not authorized"})
     }
 }
 app.get("/", (req, res) => {
-    res.render("index.ejs")
+    res.json({message:"welcome to the home page"});
 })
 
     
 app.get("/done", isAuth, async(req, res) => {
     const users= await User.find({})
-    res.render("done.ejs",{users:users})
+    res.json(users);
 })
 app.post("/logout", (req, res) => {
     req.session.destroy((err) => {
         if (err) throw err;
-        res.redirect("/")
+        res.json({message:"you have been logged out"});
     })
 })
 
-// app.listen(port, () => {
-//     console.log(`server has started on ${port}`);
-// })
+app.listen(port, () => {
+    console.log(`server has started on ${port}`);
+})
 
-sslServer.listen(3443,()=>console.log("secure network has established on port 3443"))

@@ -10,19 +10,16 @@ router.post("/login", async (req, res) => {
     const { email, password } = req.body
     const user = await User.findOne({ email })
     if (!user) {
-        return res.redirect("/register")
+        return res.json({message:"user not found"})
     }
-    if(user.verified){
+    // if(user.verified){
     const isMatch = await bcrypt.compare(password, user.password)
     if (!isMatch) {
-        return res.redirect("/login")
+        return res.json({message:"password is incorrect"})
 
     }
     req.session.isAuth = true
-    res.redirect("/done")
-}else{
-    console.log("you are not verified")
-    res.redirect("verified2.ejs")
-}
+    res.json({message:"login successfull"});
+
 })
 module.exports = router
